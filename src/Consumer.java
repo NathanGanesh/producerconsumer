@@ -1,11 +1,12 @@
 import java.util.List;
 
 public class Consumer implements Runnable {
-    List<Integer> products = null;
-    final int LIMIT = 5;
+    List<Integer> products;
+     int limit;
     private int productNummer;
 
-    public Consumer(List<Integer> products) {
+    public Consumer(List<Integer> products, int limit) {
+        this.limit = limit;
         this.products = products;
     }
 
@@ -13,13 +14,11 @@ public class Consumer implements Runnable {
         synchronized (products) {
             while (products.isEmpty()) {
                 System.out.println("No question to answer .. waiting!!!");
-
                 products.wait();
-
             }
 
             synchronized (products) {
-                Thread.sleep(5000);
+                Thread.sleep(2000);
                 System.out.println("answered question: " + products.remove(0));
 
                 products.notify();
@@ -30,7 +29,6 @@ public class Consumer implements Runnable {
     @Override
     public void run() {
         while (true){
-
             try {
                 answerQuestion();
             } catch (InterruptedException e) {
